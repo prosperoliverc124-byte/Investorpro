@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Deposit — InvestorPro</title>
+    <link rel="icon" href="https://i.postimg.cc/j5dLBnvw/Minimalist-logo-for-202603191648.jpg" type="image/jpeg">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f5f7fa;
+            color: #1a1a2e;
+            padding-bottom: 80px;
+            min-height: 100vh;
+        }
+
+        a, button, input {
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        .press { transition: transform 0.15s ease; }
+        .press:active { transform: scale(0.95); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes checkPop {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* TOP BAR */
+        .page-bar {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .page-back {
+            width: 36px; height: 36px;
+            border-radius: 12px;
+            background: #f5f7fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a1a2e;
+            font-size: 16px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .page-title {
+            flex: 1;
+            text-align: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .page-spacer {
+            width: 36px;
+            flex-shrink: 0;
+        }
+
+        /* CONTENT */
+        .page-content {
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            animation: fadeUp 0.5s ease;
+        }
+
+        /* BALANCE DISPLAY */
+        .bal-display {
+            text-align: center;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .bal-label {
+            font-size: 13px;
+            color: #9ca3af;
+            margin-bottom: 6px;
+        }
+
+        .bal-amount {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 34px;
+            font-weight: 800;
+            color: #1a1a2e;
+        }
+
+        /* AMOUNT INPUT */
+        .input-section {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .input-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+
+        .amount-wrap {
+            display: flex;
+            align-items: center;
+            background: #f8fafc;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 4px;
+            transition: border-color 0.3s;
+        }
+
+        .amount-wrap:focus-within {
+            border-color: #1a56cc;
+        }
+
+        .amount-prefix {
+            padding: 10px 14px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a56cc;
+        }
+
+        .amount-input {
+            flex: 1;
+            padding: 14px 14px 14px 0;
+            border: none;
+            background: transparent;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a2e;
+            -webkit-appearance: none;
+        }
+
+        .amount-input::placeholder {
+            color: #d1d5db;
+            font-weight: 500;
+        }
+
+        .amount-input:focus { outline: none; }
+
+        .min-note {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        /* QUICK AMOUNTS */
+        .quick-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .quick-chip {
+            padding: 12px;
+            background: #ffffff;
+            border-radius: 12px;
+            text-align: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a2e;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-chip:hover {
+            background: #f0f4ff;
+            color: #1a56cc;
+        }
+
+        .quick-chip.selected {
+            background: #1a56cc;
+            color: #ffffff;
+        }
+
+        /* PAYMENT METHOD */
+        .method-section {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .method-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 14px;
+        }
+
+        .method-option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 8px;
+        }
+
+        .method-option:hover { background: #f8fafc; }
+
+        .method-option.selected { background: #f0f4ff; }
+
+        .method-icon {
+            width: 42px; height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .mi-bank { background: #f0f4ff; color: #1a56cc; }
+        .mi-card { background: #f0fdf4; color: #10b981; }
+
+        .method-text {
+            flex: 1;
+        }
+
+        .method-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .method-desc {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .method-radio {
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            border: 2px solid #d1d5db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .method-option.selected .method-radio {
+            border-color: #1a56cc;
+        }
+
+        .method-radio-inner {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: transparent;
+            transition: all 0.2s;
+        }
+
+        .method-option.selected .method-radio-inner {
+            background: #1a56cc;
+        }
+
+        /* PAY BUTTON */
+        .pay-btn {
+            width: 100%;
+            padding: 16px;
+            background: #1a56cc;
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .pay-btn:hover { background: #1545a8; }
+
+        .pay-btn:disabled {
+            background: #94a3b8;
+            pointer-events: none;
+        }
+
+        .pay-btn.loading { pointer-events: none; opacity: 0.8; }
+
+        .pay-btn .spinner {
+            width: 20px; height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            display: none;
+        }
+
+        .pay-btn.loading .spinner { display: block; }
+        .pay-btn.loading .btn-text { display: none; }
+
+        .secure-note {
+            text-align: center;
+            font-size: 12px;
+            color: #9ca3af;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .secure-note i { color: #10b981; }
+
+        /* SUCCESS OVERLAY */
+        .success-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.98);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .success-overlay.show { display: flex; }
+
+        .success-check {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: #10b981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: #fff;
+            margin-bottom: 20px;
+            animation: checkPop 0.5s ease;
+        }
+
+        .success-overlay h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-bottom: 6px;
+        }
+
+        .success-overlay p {
+            font-size: 14px;
+            color: #9ca3af;
+            margin-bottom: 6px;
+        }
+
+        .success-amount {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: #10b981;
+            margin-bottom: 24px;
+        }
+
+        .success-btn {
+            padding: 14px 40px;
+            background: #1a56cc;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0 14px;
+            border-top: 1px solid #f0f0f0;
+            z-index: 1000;
+        }
+
+        .nav-tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            padding: 4px 12px;
+        }
+
+        .nav-tab i { font-size: 20px; color: #9ca3af; }
+        .nav-tab span { font-size: 10px; font-weight: 600; color: #9ca3af; }
+        .nav-tab.active i { color: #1a56cc; }
+        .nav-tab.active span { color: #1a56cc; }
+        .nav-tab:active { transform: scale(0.9); }
+
+        @media (min-width: 769px) {
+            .page-content { max-width: 480px; }
+            .bottom-nav {
+                max-width: 500px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 20px 20px 0 0;
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+            }
+            .page-bar {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SUCCESS OVERLAY -->
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-check"><i class="fas fa-check"></i></div>
+        <h2>Deposit Successful!</h2>
+        <p>Your wallet has been funded</p>
+        <div class="success-amount" id="successAmount">+₦5,000</div>
+        <a href="dashboard.html" class="success-btn press">Back to Dashboard</a>
+    </div>
+
+    <!-- TOP BAR -->
+    <div class="page-bar">
+        <a href="dashboard.html" class="page-back press"><i class="fas fa-arrow-left"></i></a>
+        <div class="page-title">Deposit</div>
+        <div class="page-spacer"></div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="page-content">
+
+        <!-- BALANCE -->
+        <div class="bal-display">
+            <div class="bal-label">Current Balance</div>
+            <div class="bal-amount" id="currentBal">₦0.00</div>
+        </div>
+
+        <!-- AMOUNT INPUT -->
+        <div class="input-section">
+            <div class="input-label">Enter Amount</div>
+            <div class="amount-wrap">
+                <div class="amount-prefix">₦</div>
+                <input type="number" class="amount-input" id="amountInput" placeholder="0.00" min="1000">
+            </div>
+            <div class="min-note">Minimum deposit: ₦1,000</div>
+        </div>
+
+        <!-- QUICK AMOUNTS -->
+        <div class="quick-label">Quick Select</div>
+        <div class="quick-grid">
+            <div class="quick-chip press" onclick="selectAmount(1000, this)">₦1,000</div>
+            <div class="quick-chip press" onclick="selectAmount(5000, this)">₦5,000</div>
+            <div class="quick-chip press" onclick="selectAmount(10000, this)">₦10,000</div>
+            <div class="quick-chip press" onclick="selectAmount(20000, this)">₦20,000</div>
+            <div class="quick-chip press" onclick="selectAmount(50000, this)">₦50,000</div>
+            <div class="quick-chip press" onclick="selectAmount(100000, this)">₦100,000</div>
+        </div>
+
+        <!-- PAYMENT METHOD -->
+        <div class="method-section">
+            <div class="method-label">Payment Method</div>
+            <div class="method-option selected" onclick="selectMethod(this)">
+                <div class="method-icon mi-bank"><i class="fas fa-building-columns"></i></div>
+                <div class="method-text">
+                    <div class="method-name">Bank Transfer</div>
+                    <div class="method-desc">Transfer from your bank account</div>
+                </div>
+                <div class="method-radio"><div class="method-radio-inner"></div></div>
+            </div>
+            <div class="method-option" onclick="selectMethod(this)">
+                <div class="method-icon mi-card"><i class="fas fa-credit-card"></i></div>
+                <div class="method-text">
+                    <div class="method-name">Card Payment</div>
+                    <div class="method-desc">Pay with debit or credit card</div>
+                </div>
+                <div class="method-radio"><div class="method-radio-inner"></div></div>
+            </div>
+        </div>
+
+        <!-- PAY BUTTON -->
+        <button class="pay-btn press" id="payBtn" onclick="processDeposit()" disabled>
+            <span class="btn-text">Proceed to Pay</span>
+            <div class="spinner"></div>
+        </button>
+
+        <div class="secure-note">
+            <i class="fas fa-lock"></i> Secured with 256-bit SSL encryption
+        </div>
+
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-tab"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="deposit.html" class="nav-tab active"><i class="fas fa-plus-circle"></i><span>Deposit</span></a>
+        <a href="invest.html" class="nav-tab"><i class="fas fa-chart-line"></i><span>Invest</span></a>
+        <a href="withdraw.html" class="nav-tab"><i class="fas fa-wallet"></i><span>Withdraw</span></a>
+        <a href="profile.html" class="nav-tab"><i class="fas fa-user"></i><span>Profile</span></a>
+    </div>
+
+    <script>
+        // CHECK LOGIN
+        if (localStorage.getItem('investorpro_logged_in') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        // LOAD BALANCE
+        var stored = localStorage.getItem('investorpro_user');
+        if (stored) {
+            var user = JSON.parse(stored);
+            var bal = user.balance || 0;
+            document.getElementById('currentBal').textContent = '₦' + bal.toLocaleString() + '.00';
+        }
+
+        // SELECT QUICK AMOUNT
+        function selectAmount(amount, el) {
+            document.getElementById('amountInput').value = amount;
+            document.querySelectorAll('.quick-chip').forEach(function(c) {
+                c.classList.remove('selected');
+            });
+            el.classList.add('selected');
+            document.getElementById('payBtn').disabled = false;
+        }
+
+        // ENABLE PAY WHEN TYPING
+        document.getElementById('amountInput').addEventListener('input', function() {
+            var val = parseInt(this.value);
+            document.getElementById('payBtn').disabled = !val || val < 1000;
+            document.querySelectorAll('.quick-chip').forEach(function(c) {
+                c.classList.remove('selected');
+            });
+        });
+
+        // SELECT METHOD
+        function selectMethod(el) {
+            document.querySelectorAll('.method-option').forEach(function(m) {
+                m.classList.remove('selected');
+            });
+            el.classList.add('selected');
+        }
+
+        // PROCESS DEPOSIT
+        function processDeposit() {
+            var amount = parseInt(document.getElementById('amountInput').value);
+            if (!amount || amount < 1000) return;
+
+            var btn = document.getElementById('payBtn');
+            btn.classList.add('loading');
+
+            setTimeout(function() {
+                var stored = localStorage.getItem('investorpro_user');
+                if (stored) {
+                    var user = JSON.parse(stored);
+                    user.balance = (user.balance || 0) + amount;
+                    localStorage.setItem('investorpro_user', JSON.stringify(user));
+                }
+
+                btn.classList.remove('loading');
+                document.getElementById('successAmount').textContent = '+₦' + amount.toLocaleString();
+                document.getElementById('successOverlay').classList.add('show');
+            }, 2500);
+        }
+    </script>
+
+</body>
+  </html>
