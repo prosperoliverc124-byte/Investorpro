@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Withdraw — InvestorPro</title>
+    <link rel="icon" href="https://i.postimg.cc/j5dLBnvw/Minimalist-logo-for-202603191648.jpg" type="image/jpeg">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0; padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f5f7fa;
+            color: #1a1a2e;
+            padding-bottom: 80px;
+            min-height: 100vh;
+        }
+
+        a, button, input, select {
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        .press { transition: transform 0.15s ease; }
+        .press:active { transform: scale(0.95); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @keyframes checkPop {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .page-bar {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: #ffffff;
+            position: sticky;
+            top: 0; z-index: 100;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .page-back {
+            width: 36px; height: 36px;
+            border-radius: 12px;
+            background: #f5f7fa;
+            display: flex; align-items: center; justify-content: center;
+            color: #1a1a2e; font-size: 16px;
+            text-decoration: none; flex-shrink: 0;
+        }
+
+        .page-title {
+            flex: 1; text-align: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 17px; font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .page-spacer { width: 36px; flex-shrink: 0; }
+
+        .page-content {
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            animation: fadeUp 0.5s ease;
+        }
+
+        /* BALANCE */
+        .withdraw-bal {
+            text-align: center;
+            padding: 28px 20px;
+            background: #ffffff;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .withdraw-bal-label {
+            font-size: 13px;
+            color: #9ca3af;
+            margin-bottom: 6px;
+        }
+
+        .withdraw-bal-amount {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 34px;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .withdraw-bal-note {
+            font-size: 12px;
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        /* FORM */
+        .withdraw-form {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .form-section-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 16px;
+        }
+
+        .form-field {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-icon-left {
+            position: absolute;
+            left: 14px;
+            color: #9ca3af;
+            font-size: 15px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 14px 14px 42px;
+            background: #f8fafc;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: #1a1a2e;
+            transition: border-color 0.3s;
+            -webkit-appearance: none;
+        }
+
+        .form-input:focus {
+            border-color: #1a56cc;
+            background: #fff;
+        }
+
+        .form-input::placeholder { color: #c0c7d0; }
+
+        .form-select {
+            width: 100%;
+            padding: 14px 14px 14px 42px;
+            background: #f8fafc;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: #1a1a2e;
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .form-select:focus { border-color: #1a56cc; }
+
+        .select-arrow {
+            position: absolute;
+            right: 14px;
+            color: #9ca3af;
+            font-size: 12px;
+            pointer-events: none;
+        }
+
+        /* AMOUNT INPUT */
+        .amount-wrap {
+            display: flex;
+            align-items: center;
+            background: #f8fafc;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 4px;
+            transition: border-color 0.3s;
+        }
+
+        .amount-wrap:focus-within { border-color: #1a56cc; }
+
+        .amount-prefix {
+            padding: 10px 14px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a56cc;
+        }
+
+        .amount-input {
+            flex: 1;
+            padding: 14px 14px 14px 0;
+            border: none;
+            background: transparent;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a2e;
+            -webkit-appearance: none;
+        }
+
+        .amount-input::placeholder { color: #d1d5db; font-weight: 500; }
+        .amount-input:focus { outline: none; }
+
+        .min-note {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        /* QUICK AMOUNTS */
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quick-chip {
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 12px;
+            text-align: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a2e;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-chip:hover { background: #f0f4ff; color: #1a56cc; }
+        .quick-chip.selected { background: #1a56cc; color: #fff; }
+
+        /* PROCESSING TIME */
+        .process-note {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px;
+            background: #fffbeb;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #92400e;
+        }
+
+        .process-note i {
+            color: #f59e0b;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        /* WITHDRAW BUTTON */
+        .withdraw-btn {
+            width: 100%;
+            padding: 16px;
+            background: #f59e0b;
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .withdraw-btn:hover { background: #d97706; }
+        .withdraw-btn:disabled { background: #94a3b8; pointer-events: none; }
+        .withdraw-btn.loading { pointer-events: none; opacity: 0.8; }
+
+        .withdraw-btn .spinner {
+            width: 20px; height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            display: none;
+        }
+
+        .withdraw-btn.loading .spinner { display: block; }
+        .withdraw-btn.loading .btn-text { display: none; }
+
+        .secure-note {
+            text-align: center;
+            font-size: 12px;
+            color: #9ca3af;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .secure-note i { color: #10b981; }
+
+        /* ERROR */
+        .error-msg {
+            background: #fef2f2; color: #dc2626;
+            padding: 10px 14px; border-radius: 10px;
+            font-size: 13px; margin-bottom: 16px;
+            display: none;
+        }
+
+        /* SUCCESS OVERLAY */
+        .success-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.98);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .success-overlay.show { display: flex; }
+
+        .success-check {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: #f59e0b;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 36px; color: #fff;
+            margin-bottom: 20px;
+            animation: checkPop 0.5s ease;
+        }
+
+        .success-overlay h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 22px; font-weight: 800;
+            color: #1a1a2e; margin-bottom: 6px;
+        }
+
+        .success-overlay p {
+            font-size: 14px; color: #9ca3af;
+            margin-bottom: 6px; text-align: center;
+            padding: 0 30px;
+        }
+
+        .success-overlay .amount-display {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 28px; font-weight: 800;
+            color: #f59e0b; margin-bottom: 24px;
+        }
+
+        .success-btn {
+            padding: 14px 40px;
+            background: #1a56cc; color: #fff;
+            border: none; border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px; font-weight: 700;
+            cursor: pointer; text-decoration: none;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0 14px;
+            border-top: 1px solid #f0f0f0;
+            z-index: 1000;
+        }
+
+        .nav-tab {
+            display: flex; flex-direction: column;
+            align-items: center; gap: 4px;
+            text-decoration: none; padding: 4px 12px;
+        }
+
+        .nav-tab i { font-size: 20px; color: #9ca3af; }
+        .nav-tab span { font-size: 10px; font-weight: 600; color: #9ca3af; }
+        .nav-tab.active i { color: #1a56cc; }
+        .nav-tab.active span { color: #1a56cc; }
+        .nav-tab:active { transform: scale(0.9); }
+
+        @media (min-width: 769px) {
+            .page-content { max-width: 480px; }
+            .bottom-nav {
+                max-width: 500px; left: 50%;
+                transform: translateX(-50%);
+                border-radius: 20px 20px 0 0;
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+            }
+            .page-bar { max-width: 500px; margin: 0 auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-check"><i class="fas fa-clock"></i></div>
+        <h2>Withdrawal Submitted!</h2>
+        <p>Your request is being processed. Funds will arrive within 24 hours.</p>
+        <div class="amount-display" id="successAmount">₦5,000</div>
+        <a href="dashboard.html" class="success-btn press">Back to Dashboard</a>
+    </div>
+
+    <div class="page-bar">
+        <a href="dashboard.html" class="page-back press"><i class="fas fa-arrow-left"></i></a>
+        <div class="page-title">Withdraw</div>
+        <div class="page-spacer"></div>
+    </div>
+
+    <div class="page-content">
+        <div class="withdraw-bal">
+            <div class="withdraw-bal-label">Available Balance</div>
+            <div class="withdraw-bal-amount" id="availBal">₦0.00</div>
+            <div class="withdraw-bal-note"><i class="fas fa-check-circle"></i> Available for withdrawal</div>
+        </div>
+
+        <div class="error-msg" id="errorMsg"></div>
+
+        <div class="withdraw-form">
+            <div class="form-section-title">Withdrawal Amount</div>
+            <div class="amount-wrap">
+                <div class="amount-prefix">₦</div>
+                <input type="number" class="amount-input" id="withdrawAmount" placeholder="0.00" min="5000">
+            </div>
+            <div class="min-note">Minimum withdrawal: ₦5,000</div>
+
+            <div style="margin-top:16px"></div>
+            <div class="quick-grid">
+                <div class="quick-chip press" onclick="selectAmount(5000, this)">₦5,000</div>
+                <div class="quick-chip press" onclick="selectAmount(10000, this)">₦10,000</div>
+                <div class="quick-chip press" onclick="selectAmount(20000, this)">₦20,000</div>
+                <div class="quick-chip press" onclick="selectAmount(50000, this)">₦50,000</div>
+                <div class="quick-chip press" onclick="selectAmount(100000, this)">₦100,000</div>
+                <div class="quick-chip press" onclick="selectAll(this)">All</div>
+            </div>
+        </div>
+
+        <div class="withdraw-form">
+            <div class="form-section-title">Bank Details</div>
+            <div class="form-field">
+                <label class="form-label">Bank Name</label>
+                <div class="form-input-wrap">
+                    <i class="fas fa-building-columns form-icon-left"></i>
+                    <select class="form-select" id="bankName" style="padding-left:42px">
+                        <option value="">Select your bank</option>
+                        <option>Access Bank</option>
+                        <option>GTBank</option>
+                        <option>First Bank</option>
+                        <option>UBA</option>
+                        <option>Zenith Bank</option>
+                        <option>Kuda Bank</option>
+                        <option>OPay</option>
+                        <option>PalmPay</option>
+                        <option>Moniepoint</option>
+                        <option>Wema Bank</option>
+                        <option>Sterling Bank</option>
+                        <option>Fidelity Bank</option>
+                    </select>
+                    <i class="fas fa-chevron-down select-arrow"></i>
+                </div>
+            </div>
+            <div class="form-field">
+                <label class="form-label">Account Number</label>
+                <div class="form-input-wrap">
+                    <i class="fas fa-hashtag form-icon-left"></i>
+                    <input type="tel" class="form-input" id="accountNum" placeholder="0123456789" maxlength="10">
+                </div>
+            </div>
+            <div class="form-field">
+                <label class="form-label">Account Name</label>
+                <div class="form-input-wrap">
+                    <i class="fas fa-user form-icon-left"></i>
+                    <input type="text" class="form-input" id="accountName" placeholder="Account holder's name">
+                </div>
+            </div>
+        </div>
+
+        <div class="process-note">
+            <i class="fas fa-info-circle"></i>
+            <span>Withdrawals are processed within 24 hours. A fee of ₦50 applies per transaction.</span>
+        </div>
+
+        <button class="withdraw-btn press" id="withdrawBtn" onclick="processWithdraw()" disabled>
+            <span class="btn-text"><i class="fas fa-wallet"></i> Withdraw Funds</span>
+            <div class="spinner"></div>
+        </button>
+
+        <div class="secure-note">
+            <i class="fas fa-lock"></i> Your bank details are encrypted and secure
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-tab"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="deposit.html" class="nav-tab"><i class="fas fa-plus-circle"></i><span>Deposit</span></a>
+        <a href="invest.html" class="nav-tab"><i class="fas fa-chart-line"></i><span>Invest</span></a>
+        <a href="withdraw.html" class="nav-tab active"><i class="fas fa-wallet"></i><span>Withdraw</span></a>
+        <a href="profile.html" class="nav-tab"><i class="fas fa-user"></i><span>Profile</span></a>
+    </div>
+
+    <script>
+        if (localStorage.getItem('investorpro_logged_in') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        var stored = localStorage.getItem('investorpro_user');
+        var user = stored ? JSON.parse(stored) : null;
+        var userBalance = 0;
+
+        if (user) {
+            var totalEarned = 0;
+            if (user.machines && user.machines.length > 0) {
+                user.machines.forEach(function(m) {
+                    var started = new Date(m.started);
+                    var now = new Date();
+                    var days = Math.floor((now - started) / (1000*60*60*24)) + 1;
+                    if (days > m.duration) days = m.duration;
+                    totalEarned += days * m.daily;
+                });
+            }
+            userBalance = (user.balance || 0) + totalEarned;
+            document.getElementById('availBal').textContent = '₦' + userBalance.toLocaleString() + '.00';
+        }
+
+        function selectAmount(amount, el) {
+            document.getElementById('withdrawAmount').value = amount;
+            document.querySelectorAll('.quick-chip').forEach(function(c) { c.classList.remove('selected'); });
+            el.classList.add('selected');
+            checkForm();
+        }
+
+        function selectAll(el) {
+            document.getElementById('withdrawAmount').value = userBalance;
+            document.querySelectorAll('.quick-chip').forEach(function(c) { c.classList.remove('selected'); });
+            el.classList.add('selected');
+            checkForm();
+        }
+
+        document.getElementById('withdrawAmount').addEventListener('input', function() {
+            document.querySelectorAll('.quick-chip').forEach(function(c) { c.classList.remove('selected'); });
+            checkForm();
+        });
+
+        document.getElementById('bankName').addEventListener('change', checkForm);
+        document.getElementById('accountNum').addEventListener('input', checkForm);
+        document.getElementById('accountName').addEventListener('input', checkForm);
+
+        function checkForm() {
+            var amount = parseInt(document.getElementById('withdrawAmount').value);
+            var bank = document.getElementById('bankName').value;
+            var accNum = document.getElementById('accountNum').value;
+            var accName = document.getElementById('accountName').value;
+            var valid = amount >= 5000 && bank && accNum.length === 10 && accName.length > 2;
+            document.getElementById('withdrawAmount').addEventListener('input', function() {
+            document.querySelectorAll('.quick-chip').forEach(function(c) { c.classList.remove('selected'); });
+            checkForm();
+        });
+
+        document.getElementById('bankName').addEventListener('change', checkForm);
+        document.getElementById('accountNum').addEventListener('input', checkForm);
+        document.getElementById('accountName').addEventListener('input', checkForm);
+
+        function checkForm() {
+            var amount = parseInt(document.getElementById('withdrawAmount').value);
+            var bank = document.getElementById('bankName').value;
+            var accNum = document.getElementById('accountNum').value;
+            var accName = document.getElementById('accountName').value;
+            var valid = amount >= 5000 && bank && accNum.length === 10 && accName.length > 2;
+            document.getElementById('withdrawBtn').disabled = !valid;
+        }
+
+        function processWithdraw() {
+            var amount = parseInt(document.getElementById('withdrawAmount').value);
+            var errorMsg = document.getElementById('errorMsg');
+            var btn = document.getElementById('withdrawBtn');
+
+            errorMsg.style.display = 'none';
+
+            if (amount > userBalance) {
+                errorMsg.textContent = 'Insufficient balance for this withdrawal';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            if (amount < 5000) {
+                errorMsg.textContent = 'Minimum withdrawal is ₦5,000';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            btn.classList.add('loading');
+
+            setTimeout(function() {
+                user.balance = (user.balance || 0) - amount;
+                localStorage.setItem('investorpro_user', JSON.stringify(user));
+
+                btn.classList.remove('loading');
+                document.getElementById('successAmount').textContent = '₦' + amount.toLocaleString();
+                document.getElementById('successOverlay').classList.add('show');
+            }, 2500);
+        }
+    </script>
+
+</body>
+</html>
