@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Sign Up — InvestorPro</title>
+    <link rel="icon" href="https://i.postimg.cc/j5dLBnvw/Minimalist-logo-for-202603191648.jpg" type="image/jpeg">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #0a1628;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+
+        a, button, input {
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        .press { transition: transform 0.15s ease; }
+        .press:active { transform: scale(0.95); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 40px 30px;
+            animation: fadeUp 0.5s ease;
+        }
+
+        .auth-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .auth-logo img {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+        }
+
+        .auth-logo span {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 20px; font-weight: 800;
+            color: #1a1a2e;
+        }
+
+        .auth-logo span b { color: #1a56cc; }
+
+        .auth-title {
+            text-align: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 22px; font-weight: 800;
+            color: #1a1a2e; margin-bottom: 4px;
+        }
+
+        .auth-sub {
+            text-align: center;
+            font-size: 14px; color: #9ca3af;
+            margin-bottom: 30px;
+        }
+
+        .form-field { margin-bottom: 16px; }
+
+        .form-label {
+            display: block; font-size: 13px;
+            font-weight: 600; color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-icon-left {
+            position: absolute;
+            left: 14px;
+            color: #9ca3af;
+            font-size: 15px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 50px 14px 42px;
+            background: #f8fafc;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: #1a1a2e;
+            transition: border-color 0.3s;
+            -webkit-appearance: none;
+        }
+
+        .form-input-noicon {
+            padding: 14px 14px 14px 42px;
+        }
+
+        .form-input:focus {
+            border-color: #1a56cc;
+            background: #fff;
+        }
+
+        .form-input::placeholder { color: #c0c7d0; }
+
+        .pass-toggle {
+            position: absolute;
+            right: 14px;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 15px;
+            padding: 8px;
+            z-index: 2;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .form-check input[type="checkbox"] {
+            width: 18px; height: 18px;
+            margin-top: 2px;
+            accent-color: #1a56cc;
+            flex-shrink: 0;
+        }
+
+        .form-check label {
+            font-size: 13px; color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .form-check label a {
+            color: #1a56cc;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-btn {
+            width: 100%; padding: 14px;
+            background: #1a56cc; color: #fff;
+            border: none; border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px; font-weight: 700;
+            cursor: pointer; transition: background 0.3s;
+            display: flex; align-items: center;
+            justify-content: center; gap: 8px;
+        }
+
+        .auth-btn:hover { background: #1545a8; }
+
+        .auth-btn.loading {
+            pointer-events: none; opacity: 0.8;
+        }
+
+        .auth-btn .spinner {
+            width: 18px; height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            display: none;
+        }
+
+        .auth-btn.loading .spinner { display: block; }
+        .auth-btn.loading .btn-text { display: none; }
+
+        .auth-switch {
+            text-align: center; margin-top: 22px;
+            font-size: 14px; color: #9ca3af;
+        }
+
+        .auth-switch a {
+            color: #1a56cc; text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-home {
+            display: block; text-align: center;
+            margin-top: 16px; font-size: 13px;
+            color: #667788; text-decoration: none;
+        }
+
+        .back-home:hover { color: #1a56cc; }
+
+        .error-msg {
+            background: #fef2f2; color: #dc2626;
+            padding: 10px 14px; border-radius: 10px;
+            font-size: 13px; margin-bottom: 16px;
+            display: none;
+        }
+
+        .success-msg {
+            background: #f0fdf4; color: #16a34a;
+            padding: 10px 14px; border-radius: 10px;
+            font-size: 13px; margin-bottom: 16px;
+            display: none;
+        }
+
+        /* DESKTOP RESPONSIVE */
+        @media (min-width: 769px) {
+            body {
+                background: #0a1628;
+                background-image:
+                    radial-gradient(circle at 20% 50%, rgba(26, 86, 204, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(26, 86, 204, 0.08) 0%, transparent 40%);
+            }
+
+            .auth-card {
+                max-width: 440px;
+                padding: 45px 40px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-card">
+        <div class="auth-logo">
+            <img src="https://i.postimg.cc/j5dLBnvw/Minimalist-logo-for-202603191648.jpg" alt="Logo">
+            <span>Investor<b>Pro</b></span>
+        </div>
+        <h1 class="auth-title">Create Account</h1>
+        <p class="auth-sub">Start earning with your free machine</p>
+
+        <div class="error-msg" id="errorMsg"></div>
+        <div class="success-msg" id="successMsg"></div>
+
+        <form id="signupForm" onsubmit="handleSignup(event)">
+            <div class="form-field">
+                <label class="form-label">Full Name</label>
+                <div class="form-input-wrap">
+                    <i class="fas fa-user form-icon-left"></i>
+                    <input type="text" class="form-input form-input-noicon" id="fullName" placeholder="Enter your full name" required>
+                </div>
+            </div>
+            <div class="form-field">
+                <label class="form-label">Email Address</label>
+                <div class="form-input-wrap">
+                    <i class="fas fa-envelope form-icon-left"></i>
+                    <input type="email" class="form-input form-input-noicon" id="email" placeholder="Enter your email" required>
+                </div>
+            </div>
+            <div class="form-field">
+                <label class="form-label">Phone Number</label>
+                <div class="form-input-wrap">
+                    <i class="fas fa-phone form-icon-left"></i>
+                    <input type="tel" class="form-input form-input-noicon" id="phone" placeholder="08012345678" required>
+                </div>
+            </div>
+            <div class="form-field">
+                <label class="form-label">Password</label>
+                <div class="form-input-wrap">
+                    <i class="fas fa-lock form-icon-left"></i>
+                    <input type="password" class="form-input" id="password" placeholder="Create a password" required>
+                    <i class="fas fa-eye pass-toggle" onclick="togglePass('password', this)"></i>
+                </div>
+            </div>
+            <div class="form-field">
+                <label class="form-label">Confirm Password</label>
+                <div class="form-input-wrap">
+                    <i class="fas fa-lock form-icon-left"></i>
+                    <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm your password" required>
+                    <i class="fas fa-eye pass-toggle" onclick="togglePass('confirmPassword', this)"></i>
+                </div>
+            </div>
+            <div class="form-field">
+                <label class="form-label">Referral Code <span style="color:#9ca3af">(optional)</span></label>
+                <div class="form-input-wrap">
+                    <i class="fas fa-gift form-icon-left"></i>
+                    <input type="text" class="form-input form-input-noicon" id="referral" placeholder="Enter referral code">
+                </div>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+            </div>
+            <button type="submit" class="auth-btn press" id="signupBtn">
+                <span class="btn-text">Create Account</span>
+                <div class="spinner"></div>
+            </button>
+        </form>
+
+        <div class="auth-switch">
+            Already have an account? <a href="login.html">Log In</a>
+        </div>
+        <a href="index.html" class="back-home"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+
+    <script>
+        function togglePass(fieldId, icon) {
+            var field = document.getElementById(fieldId);
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        function handleSignup(e) {
+            e.preventDefault();
+            var name = document.getElementById('fullName').value;
+            var email = document.getElementById('email').value;
+            var phone = document.getElementById('phone').value;
+            var pass = document.getElementById('password').value;
+            var confirm = document.getElementById('confirmPassword').value;
+            var terms = document.getElementById('terms').checked;
+            var referral = document.getElementById('referral').value;
+            var errorMsg = document.getElementById('errorMsg');
+            var successMsg = document.getElementById('successMsg');
+            var btn = document.getElementById('signupBtn');
+
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+
+            if (pass.length < 6) {
+                errorMsg.textContent = 'Password must be at least 6 characters';
+                errorMsg.style.display = 'block';
+                return;
+            }
+            if (pass !== confirm) {
+                errorMsg.textContent = 'Passwords do not match';
+                errorMsg.style.display = 'block';
+                return;
+            }
+            if (!terms) {
+                errorMsg.textContent = 'Please agree to the Terms of Service';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            btn.classList.add('loading');
+
+            var user = {
+                name: name, email: email, phone: phone,
+                password: pass, referral: referral,
+                balance: 0, earnings: 0, referrals: 0,
+                machines: [], joined: new Date().toISOString()
+            };
+
+            setTimeout(function() {
+                localStorage.setItem('investorpro_user', JSON.stringify(user));
+                localStorage.setItem('investorpro_logged_in', 'true');
+                localStorage.setItem('investorpro_phone', phone);
+                successMsg.textContent = 'Account created! Redirecting...';
+                successMsg.style.display = 'block';
+                btn.classList.remove('loading');
+                setTimeout(function() {
+                    window.location.href = 'otp.html';
+                }, 1500);
+            }, 2000);
+        }
+    </script>
+
+</body>
+  </html>
