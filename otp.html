@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Verify Phone — InvestorPro</title>
+    <link rel="icon" href="https://i.postimg.cc/j5dLBnvw/Minimalist-logo-for-202603191648.jpg" type="image/jpeg">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #0a1628;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+
+        a, button, input {
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        .press { transition: transform 0.15s ease; }
+        .press:active { transform: scale(0.95); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            50% { transform: translateX(8px); }
+            75% { transform: translateX(-5px); }
+        }
+
+        @keyframes checkmark {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 40px 30px;
+            animation: fadeUp 0.5s ease;
+            text-align: center;
+        }
+
+        .auth-card.shake {
+            animation: shake 0.4s ease;
+        }
+
+        .auth-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .auth-logo img {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+        }
+
+        .auth-logo span {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 20px; font-weight: 800;
+            color: #1a1a2e;
+        }
+
+        .auth-logo span b { color: #1a56cc; }
+
+        .otp-icon {
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            background: #f0f4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 30px;
+            color: #1a56cc;
+        }
+
+        .auth-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 22px; font-weight: 800;
+            color: #1a1a2e; margin-bottom: 8px;
+        }
+
+        .auth-sub {
+            font-size: 14px; color: #9ca3af;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .phone-display {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 30px;
+        }
+
+        .otp-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .otp-box {
+            width: 48px; height: 56px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 14px;
+            background: #f8fafc;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a2e;
+            text-align: center;
+            transition: border-color 0.3s;
+            -webkit-appearance: none;
+        }
+
+        .otp-box:focus {
+            border-color: #1a56cc;
+            background: #fff;
+        }
+
+        .otp-box.filled {
+            border-color: #1a56cc;
+            background: #f0f4ff;
+        }
+
+        .otp-box.success {
+            border-color: #16a34a;
+            background: #f0fdf4;
+        }
+
+        .auth-btn {
+            width: 100%; padding: 14px;
+            background: #1a56cc; color: #fff;
+            border: none; border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px; font-weight: 700;
+            cursor: pointer; transition: background 0.3s;
+            display: flex; align-items: center;
+            justify-content: center; gap: 8px;
+        }
+
+        .auth-btn:hover { background: #1545a8; }
+
+        .auth-btn.loading {
+            pointer-events: none; opacity: 0.8;
+        }
+
+        .auth-btn .spinner {
+            width: 18px; height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            display: none;
+        }
+
+        .auth-btn.loading .spinner { display: block; }
+        .auth-btn.loading .btn-text { display: none; }
+        .auth-btn:disabled { background: #94a3b8; pointer-events: none; }
+
+        .resend-section {
+            margin-top: 22px;
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        .resend-link {
+            color: #1a56cc;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .timer {
+            font-weight: 600;
+            color: #1a56cc;
+        }
+
+        .error-msg {
+            background: #fef2f2; color: #dc2626;
+            padding: 10px 14px; border-radius: 10px;
+            font-size: 13px; margin-bottom: 16px;
+            display: none;
+        }
+
+        .success-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(10, 22, 40, 0.95);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .success-overlay.show { display: flex; }
+
+        .success-check {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: #16a34a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: #fff;
+            margin-bottom: 20px;
+            animation: checkmark 0.5s ease;
+        }
+
+        .success-overlay h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 24px; font-weight: 800;
+            color: #fff; margin-bottom: 8px;
+        }
+
+        .success-overlay p {
+            font-size: 14px; color: #9ca3af;
+        }
+
+        @media (min-width: 769px) {
+            body {
+                background-image:
+                    radial-gradient(circle at 20% 50%, rgba(26, 86, 204, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(26, 86, 204, 0.08) 0%, transparent 40%);
+            }
+
+            .auth-card {
+                max-width: 440px;
+                padding: 45px 40px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            }
+
+            .otp-box {
+                width: 54px; height: 62px;
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-check"><i class="fas fa-check"></i></div>
+        <h2>Verified!</h2>
+        <p>Redirecting to login...</p>
+    </div>
+
+    <div class="auth-card" id="authCard">
+        <div class="auth-logo">
+            <img src="https://i.postimg.cc/j5dLBnvw/Minimalist-logo-for-202603191648.jpg" alt="Logo">
+            <span>Investor<b>Pro</b></span>
+        </div>
+        <div class="otp-icon"><i class="fas fa-shield-alt"></i></div>
+        <h1 class="auth-title">Verify Your Phone</h1>
+        <p class="auth-sub">We sent a 6-digit verification code to</p>
+        <p class="phone-display" id="phoneDisplay">0801****5678</p>
+        <div class="error-msg" id="errorMsg"></div>
+        <div class="otp-inputs" id="otpInputs">
+            <input type="tel" class="otp-box" maxlength="1" id="otp1" oninput="handleOtp(this, 'otp2')" onkeydown="handleBack(event, null)">
+            <input type="tel" class="otp-box" maxlength="1" id="otp2" oninput="handleOtp(this, 'otp3')" onkeydown="handleBack(event, 'otp1')">
+            <input type="tel" class="otp-box" maxlength="1" id="otp3" oninput="handleOtp(this, 'otp4')" onkeydown="handleBack(event, 'otp2')">
+            <input type="tel" class="otp-box" maxlength="1" id="otp4" oninput="handleOtp(this, 'otp5')" onkeydown="handleBack(event, 'otp3')">
+            <input type="tel" class="otp-box" maxlength="1" id="otp5" oninput="handleOtp(this, 'otp6')" onkeydown="handleBack(event, 'otp4')">
+            <input type="tel" class="otp-box" maxlength="1" id="otp6" oninput="handleOtp(this, null)" onkeydown="handleBack(event, 'otp5')">
+        </div>
+        <button class="auth-btn press" id="verifyBtn" onclick="verifyOtp()" disabled>
+            <span class="btn-text">Verify Code</span>
+            <div class="spinner"></div>
+        </button>
+        <div class="resend-section">
+            <span id="resendArea">
+                Resend code in <span class="timer" id="timer">60</span>s
+            </span>
+        </div>
+    </div>
+
+    <script>
+        var storedPhone = localStorage.getItem('investorpro_phone') || '08012345678';
+        var masked = storedPhone.substring(0, 4) + '****' + storedPhone.substring(storedPhone.length - 4);
+        document.getElementById('phoneDisplay').textContent = masked;
+
+        function handleOtp(current, nextId) {
+            current.value = current.value.replace(/[^0-9]/g, '');
+            if (current.value.length === 1) {
+                current.classList.add('filled');
+                if (nextId) document.getElementById(nextId).focus();
+            }
+            checkAllFilled();
+        }
+
+        function handleBack(e, prevId) {
+            if (e.key === 'Backspace' && e.target.value === '' && prevId) {
+                var prev = document.getElementById(prevId);
+                prev.focus();
+                prev.value = '';
+                prev.classList.remove('filled');
+            }
+            if (e.key === 'Backspace') e.target.classList.remove('filled');
+            checkAllFilled();
+        }
+
+        function checkAllFilled() {
+            var allFilled = true;
+            for (var i = 1; i <= 6; i++) {
+                if (document.getElementById('otp' + i).value === '') allFilled = false;
+            }
+            document.getElementById('verifyBtn').disabled = !allFilled;
+        }
+
+        function verifyOtp() {
+            var btn = document.getElementById('verifyBtn');
+            btn.classList.add('loading');
+            var code = '';
+            for (var i = 1; i <= 6; i++) code += document.getElementById('otp' + i).value;
+
+            setTimeout(function() {
+                if (code.length === 6) {
+                    for (var i = 1; i <= 6; i++) document.getElementById('otp' + i).classList.add('success');
+                    btn.classList.remove('loading');
+                    setTimeout(function() {
+                        document.getElementById('successOverlay').classList.add('show');
+                        var stored = localStorage.getItem('investorpro_user');
+                        if (stored) {
+                            var user = JSON.parse(stored);
+                            user.verified = true;
+                            user.machines = [{
+                                name: 'Coffee Maker', icon: '☕',
+                                price: 0, daily: 200, duration: 3,
+                                daysLeft: 3, earned: 0,
+                                started: new Date().toISOString()
+                            }];
+                            localStorage.setItem('investorpro_user', JSON.stringify(user));
+                        }
+                        setTimeout(function() {
+                            window.location.href = 'login.html';
+                        }, 2000);
+                    }, 500);
+                }
+            }, 1500);
+        }
+
+        var countdown = 60;
+        var timerEl = document.getElementById('timer');
+        var resendArea = document.getElementById('resendArea');
+        var interval = setInterval(function() {
+            countdown--;
+            timerEl.textContent = countdown;
+            if (countdown <= 0) {
+                clearInterval(interval);
+                resendArea.innerHTML = '<a class="resend-link" onclick="resendCode()">Resend Code</a>';
+            }
+        }, 1000);
+
+        function resendCode() {
+            countdown = 60;
+            resendArea.innerHTML = 'Resend code in <span class="timer" id="timer">60</span>s';
+            timerEl = document.getElementById('timer');
+            interval = setInterval(function() {
+                countdown--;
+                timerEl.textContent = countdown;
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    resendArea.innerHTML = '<a class="resend-link" onclick="resendCode()">Resend Code</a>';
+                }
+            }, 1000);
+        }
+
+        document.getElementById('otp1').focus();
+    </script>
+
+</body>
+  </html>
