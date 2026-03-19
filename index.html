@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>InvestorPro — Smart Machine Investments</title>
+    <link rel="icon" href="https://i.postimg.cc/j5dLBnvw/Minimalist-logo-for-202603191648.jpg" type="image/jpeg">
+    <meta name="description" content="InvestorPro - Buy virtual machines that earn daily returns. Start free with our Coffee Maker.">
+    <meta property="og:title" content="InvestorPro — Smart Machine Investments">
+    <meta property="og:description" content="Buy virtual machines that earn daily returns. Start free today.">
+    <meta property="og:image" content="https://i.postimg.cc/j5dLBnvw/Minimalist-logo-for-202603191648.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #ffffff;
+            color: #1a1a2e;
+            overflow-x: hidden;
+        }
+
+        a, button, input {
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        .press {
+            transition: transform 0.15s ease;
+        }
+
+        .press:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes pageIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        body { animation: pageIn 0.4s ease; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .anim {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .anim.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* PRELOADER */
+        .preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .preloader.hidden { opacity: 0; visibility: hidden; }
+
+        .preloader-logo {
+            width: 60px; height: 60px;
+            border-radius: 16px;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .preloader-name {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: #1a1a2e;
+        }
+
+        .preloader-name span { color: #1a56cc; }
+
+        .preloader-dots {
+            display: flex;
+            gap: 6px;
+            margin-top: 20px;
+        }
+
+        .preloader-dots div {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #1a56cc;
+            animation: dotPulse 1.2s ease infinite;
+        }
+
+        .preloader-dots div:nth-child(2) { animation-delay: 0.2s; }
+        .preloader-dots div:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes dotPulse {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* NAVBAR */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 24px;
+            background: #ffffff;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            transition: box-shadow 0.3s;
+        }
+
+        nav.shadow {
+            box-shadow: 0 1px 10px rgba(0,0,0,0.06);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo {
+            width: 34px; height: 34px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .nav-name {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: #1a1a2e;
+        }
+
+        .nav-name span { color: #1a56cc; }
+
+        .nav-right {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-btn-ghost {
+            padding: 9px 20px;
+            background: none;
+            color: #1a56cc;
+            border: none;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .nav-btn-ghost:hover { background: #f0f4ff; }
+
+        .nav-btn-fill {
+            padding: 9px 20px;
+            background: #1a56cc;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .nav-btn-fill:hover { background: #1545a8; }
+
+        /* HERO */
+        .hero {
+            padding: 110px 24px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background: url('https://i.postimg.cc/s2PhkrrK/Clean-minimal-abstract-202603191646.jpg') center / cover no-repeat;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.92);
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 550px;
+            margin: 0 auto;
+            animation: fadeUp 0.8s ease;
+        }
+
+        .hero-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            background: #f0f4ff;
+            color: #1a56cc;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1.2;
+            color: #1a1a2e;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 .blue { color: #1a56cc; }
+
+        .hero-sub {
+            font-size: 15px;
+            color: #6b7280;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-main {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            background: #1a56cc;
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 12px;
+            transition: background 0.3s;
+        }
+
+        .btn-main:hover { background: #1545a8; }
+
+        .btn-sec {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            background: #f0f4ff;
+            color: #1a56cc;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: background 0.3s;
+        }
+
+        .btn-sec:hover { background: #e0eaff; }
+
+        .hero-trust {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            font-size: 13px;
+            color: #9ca3af;
+        }
+
+        .hero-trust i { color: #1a56cc; }
+        /* STATS */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 40px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: #1a1a2e;
+        }
+
+        .stat-txt {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
+
+        /* TICKER */
+        .ticker {
+            background: #f8fafc;
+            padding: 10px 0;
+            overflow: hidden;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .ticker-inner {
+            display: flex;
+            gap: 40px;
+            animation: ticker 35s linear infinite;
+            white-space: nowrap;
+        }
+
+        .tick {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .tick .g {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .tick-dot {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: #10b981;
+        }
+
+        /* SECTION COMMON */
+        .sec {
+            padding: 70px 24px;
+        }
+
+        .sec-top {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .sec-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #1a56cc;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+        }
+
+        .sec-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-bottom: 6px;
+        }
+
+        .sec-desc {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        /* MACHINES */
+        .machines-list {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .machine-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            border-radius: 16px;
+            transition: background 0.3s;
+            cursor: pointer;
+        }
+
+        .machine-item:hover {
+            background: #f8fafc;
+        }
+
+        .machine-item.free-item {
+            background: #f0fdf4;
+        }
+
+        .machine-item.free-item:hover {
+            background: #e6f9ee;
+        }
+
+        .machine-img {
+            width: 65px;
+            height: 65px;
+            border-radius: 16px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .machine-info {
+            flex: 1;
+        }
+
+        .machine-info h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+        }
+
+        .machine-info .machine-sub {
+            font-size: 13px;
+            color: #9ca3af;
+        }
+
+        .machine-right {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .machine-earning {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #10b981;
+        }
+
+        .machine-price {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 2px;
+        }
+
+        .machine-arrow {
+            color: #d1d5db;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* FREE BADGE */
+        .free-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            background: #10b981;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* STEPS */
+        .steps-sec {
+            padding: 70px 24px;
+            background: #f8fafc;
+        }
+
+        .steps-list {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 18px;
+            padding: 25px 0;
+            position: relative;
+        }
+
+        .step-item:not(:last-child) {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .step-num {
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            background: #1a56cc;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+        }
+
+        .step-content p {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        /* WHY */
+        .why-list {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .why-item {
+            display: flex;
+            gap: 16px;
+            padding: 22px 0;
+        }
+
+        .why-item:not(:last-child) {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .why-icon {
+            width: 42px; height: 42px;
+            border-radius: 12px;
+            background: #f0f4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a56cc;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .why-content h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 3px;
+        }
+
+        .why-content p {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.6;
+  }
+        /* TESTIMONIALS */
+        .reviews-sec {
+            padding: 70px 24px;
+            background: #f8fafc;
+            overflow: hidden;
+        }
+
+        .reviews-scroll {
+            display: flex;
+            gap: 16px;
+            max-width: 900px;
+            margin: 0 auto;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 10px;
+            scrollbar-width: none;
+        }
+
+        .reviews-scroll::-webkit-scrollbar { display: none; }
+
+        .review-item {
+            min-width: 280px;
+            scroll-snap-align: start;
+            padding: 24px 0;
+        }
+
+        .review-stars {
+            color: #f59e0b;
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .review-text {
+            font-size: 14px;
+            color: #4b5563;
+            line-height: 1.7;
+            margin-bottom: 18px;
+            font-style: italic;
+        }
+
+        .review-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .review-avi {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            color: #fff;
+        }
+
+        .ra-1 { background: #1a56cc; }
+        .ra-2 { background: #10b981; }
+        .ra-3 { background: #f59e0b; }
+        .ra-4 { background: #ef4444; }
+
+        .review-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .review-role {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        /* FAQ */
+        .faq-sec {
+            padding: 70px 24px;
+        }
+
+        .faq-list {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #f0f0f0;
+            overflow: hidden;
+        }
+
+        .faq-q {
+            padding: 18px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .faq-q i {
+            color: #1a56cc;
+            transition: transform 0.3s;
+            font-size: 12px;
+        }
+
+        .faq-item.open .faq-q i {
+            transform: rotate(180deg);
+        }
+
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .faq-item.open .faq-a {
+            max-height: 300px;
+        }
+
+        .faq-a p {
+            padding-bottom: 18px;
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.7;
+        }
+
+        /* CTA */
+        .cta-sec {
+            padding: 70px 24px;
+            background: #f8fafc;
+            text-align: center;
+        }
+
+        .cta-inner {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .cta-inner h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+
+        .cta-inner p {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        /* FOOTER */
+        .footer {
+            padding: 50px 24px 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .footer-brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .footer-brand-logo img {
+            width: 28px; height: 28px;
+            border-radius: 8px;
+        }
+
+        .footer-brand-logo span {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            color: #1a1a2e;
+        }
+
+        .footer-brand-logo span b { color: #1a56cc; }
+
+        .footer-brand p {
+            font-size: 13px;
+            color: #9ca3af;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 8px;
+        }
+
+        .footer-socials a {
+            width: 34px; height: 34px;
+            border-radius: 10px;
+            background: #f0f4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a56cc;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .footer-socials a:hover {
+            background: #1a56cc;
+            color: #fff;
+        }
+
+        .footer-col h4 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 14px;
+        }
+
+        .footer-col a {
+            display: block;
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 13px;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover { color: #1a56cc; }
+
+        .footer-bottom {
+            max-width: 800px;
+            margin: 0 auto;
+            padding-top: 18px;
+            text-align: center;
+            font-size: 12px;
+            color: #d1d5db;
+        }
+
+        .footer-bottom span { color: #1a56cc; }
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 28px; }
+            .hero-sub { font-size: 14px; }
+            .stats { gap: 20px; }
+            .stat-num { font-size: 22px; }
+            .sec-title { font-size: 24px; }
+            .hero-btns { flex-direction: column; align-items: center; }
+            .hero-trust { flex-direction: column; gap: 8px; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .nav-btn-ghost { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PRELOADER -->
+    <div class="preloader" id="preloader">
+        <img src="https://i.postimg.cc/j5dLBnvw/Minimalist-logo-for-202603191648.jpg" class="preloader-logo" alt="Logo">
+        <div class="preloader-name">Investor<span>Pro</span></div>
+        <div class="preloader-dots">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav id="navbar">
+        <div class="nav-left">
+            <img src="https://i.postimg.cc/j5dLBnvw/Minimalist-logo-for-202603191648.jpg" class="nav-logo" alt="Logo">
+            <div class="nav-name">Investor<span>Pro</span></div>
+        </div>
+        <div class="nav-right">
+            <a href="login.html" class="nav-btn-ghost press">Log In</a>
+            <a href="signup.html" class="nav-btn-fill press">Sign Up</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-inner">
+            <div class="hero-chip"><i class="fas fa-bolt"></i> #1 Machine Investment Platform</div>
+            <h1>Buy Virtual Machines. <span class="blue">Earn Daily.</span></h1>
+            <p class="hero-sub">Start with a FREE Coffee Maker and earn ₦200 daily. Upgrade to bigger machines and grow your income automatically.</p>
+            <div class="hero-btns">
+                <a href="signup.html" class="btn-main press"><i class="fas fa-rocket"></i> Start Earning Free</a>
+                <a href="#machines" class="btn-sec press"><i class="fas fa-eye"></i> View Machines</a>
+            </div>
+            <div class="hero-trust">
+                <span><i class="fas fa-shield-alt"></i> Bank-Level Security</span>
+                <span><i class="fas fa-bolt"></i> Instant Deposits</span>
+                <span><i class="fas fa-clock"></i> 24hr Withdrawals</span>
+            </div>
+        </div>
+    </section>
+    <!-- STATS -->
+    <div class="stats anim">
+        <div class="stat-box">
+            <div class="stat-num">15,000+</div>
+            <div class="stat-txt">Active Investors</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-num">₦500M+</div>
+            <div class="stat-txt">Total Paid Out</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-num">50,000+</div>
+            <div class="stat-txt">Machines Running</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-num">99.9%</div>
+            <div class="stat-txt">Uptime</div>
+        </div>
+    </div>
+
+    <!-- TICKER -->
+    <div class="ticker">
+        <div class="ticker-inner">
+            <div class="tick"><span class="tick-dot"></span> Emeka O. just withdrew <span class="g">₦50,000</span></div>
+            <div class="tick"><span class="tick-dot"></span> Blessing N. purchased <span class="g">Pizza Oven</span></div>
+            <div class="tick"><span class="tick-dot"></span> Chidi E. just withdrew <span class="g">₦120,000</span></div>
+            <div class="tick"><span class="tick-dot"></span> Funke A. earned <span class="g">₦6,000 today</span></div>
+            <div class="tick"><span class="tick-dot"></span> Kunle D. purchased <span class="g">Ice Cream Machine</span></div>
+            <div class="tick"><span class="tick-dot"></span> Ada M. just withdrew <span class="g">₦35,000</span></div>
+            <div class="tick"><span class="tick-dot"></span> David O. purchased <span class="g">Mini Restaurant</span></div>
+            <div class="tick"><span class="tick-dot"></span> Grace I. earned <span class="g">₦13,000 today</span></div>
+        </div>
+    </div>
+
+    <!-- MACHINES -->
+    <section class="sec" id="machines">
+        <div class="sec-top anim">
+            <div class="sec-label">Our Machines</div>
+            <h2 class="sec-title">Choose Your Money Machine</h2>
+            <p class="sec-desc">Start free. Upgrade anytime. Earn daily.</p>
+        </div>
+        <div class="machines-list">
+            <a href="signup.html" class="machine-item free-item anim press" style="text-decoration:none;">
+                <img src="https://i.postimg.cc/W3HbKWdV/3D-cartoon-coffee-202603191651.jpg" class="machine-img" alt="Coffee Maker">
+                <div class="machine-info">
+                    <h3>☕ Coffee Maker <span class="free-badge">FREE</span></h3>
+                    <div class="machine-sub">3 days duration • Total return ₦600</div>
+                </div>
+                <div class="machine-right">
+                    <div class="machine-earning">₦200/day</div>
+                    <div class="machine-price">Free</div>
+                </div>
+                <div class="machine-arrow"><i class="fas fa-chevron-right"></i></div>
+            </a>
+            <a href="signup.html" class="machine-item anim press" style="text-decoration:none;">
+                <img src="https://i.postimg.cc/fRNXBy4d/3D-cartoon-juice-202603191653.jpg" class="machine-img" alt="Juice Blender">
+                <div class="machine-info">
+                    <h3>🧃 Juice Blender</h3>
+                    <div class="machine-sub">30 days duration • Total return ₦22,500</div>
+                </div>
+                <div class="machine-right">
+                    <div class="machine-earning">₦750/day</div>
+                    <div class="machine-price">₦5,000</div>
+                </div>
+                <div class="machine-arrow"><i class="fas fa-chevron-right"></i></div>
+            </a>
+            <a href="signup.html" class="machine-item anim press" style="text-decoration:none;">
+                <img src="https://i.postimg.cc/xChNHTyd/Flow-202603191655.jpg" class="machine-img" alt="Popcorn Machine">
+                <div class="machine-info">
+                    <h3>🍿 Popcorn Machine</h3>
+                    <div class="machine-sub">30 days duration • Total return ₦75,000</div>
+                </div>
+                <div class="machine-right">
+                    <div class="machine-earning">₦2,500/day</div>
+                    <div class="machine-price">₦20,000</div>
+                </div>
+                <div class="machine-arrow"><i class="fas fa-chevron-right"></i></div>
+            </a>
+            <a href="signup.html" class="machine-item anim press" style="text-decoration:none;">
+                <img src="https://i.postimg.cc/5NBBLLH4/Flow-202603191729.jpg" class="machine-img" alt="Ice Cream Machine">
+                <div class="machine-info">
+                    <h3>🍦 Ice Cream Machine</h3>
+                    <div class="machine-sub">30 days duration • Total return ₦180,000</div>
+                </div>
+                <div class="machine-right">
+                    <div class="machine-earning">₦6,000/day</div>
+                    <div class="machine-price">₦50,000</div>
+                </div>
+                <div class="machine-arrow"><i class="fas fa-chevron-right"></i></div>
+            </a>
+            <a href="signup.html" class="machine-item anim press" style="text-decoration:none;">
+                <img src="https://i.postimg.cc/85mPkpKq/3D-cartoon-pizza-202603191706.jpg" class="machine-img" alt="Pizza Oven">
+                <div class="machine-info">
+                    <h3>🍕 Pizza Oven</h3>
+                    <div class="machine-sub">30 days duration • Total return ₦390,000</div>
+                </div>
+                <div class="machine-right">
+                    <div class="machine-earning">₦13,000/day</div>
+                    <div class="machine-price">₦100,000</div>
+                </div>
+                <div class="machine-arrow"><i class="fas fa-chevron-right"></i></div>
+            </a>
+            <a href="signup.html" class="machine-item anim press" style="text-decoration:none;">
+                <img src="https://i.postimg.cc/Df5ytzbP/3D-cartoon-restaurant-202603191707.jpg" class="machine-img" alt="Mini Restaurant">
+                <div class="machine-info">
+                    <h3>🏪 Mini Restaurant</h3>
+                    <div class="machine-sub">30 days duration • Total return ₦1,050,000</div>
+                </div>
+                <div class="machine-right">
+                    <div class="machine-earning">₦35,000/day</div>
+                    <div class="machine-price">₦250,000</div>
+                </div>
+                <div class="machine-arrow"><i class="fas fa-chevron-right"></i></div>
+            </a>
+        </div>
+    </section>
+    <!-- HOW IT WORKS -->
+    <section class="steps-sec">
+        <div class="sec-top anim">
+            <div class="sec-label">How It Works</div>
+            <h2 class="sec-title">Start Earning In 4 Steps</h2>
+            <p class="sec-desc">Simple. Fast. Profitable.</p>
+        </div>
+        <div class="steps-list">
+            <div class="step-item anim">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Create Account</h3>
+                    <p>Sign up for free in 30 seconds. Verify your phone number and you're ready to go.</p>
+                </div>
+            </div>
+            <div class="step-item anim">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Get Free Machine</h3>
+                    <p>Every new user gets a FREE Coffee Maker that earns ₦200 daily for 3 days. No deposit needed.</p>
+                </div>
+            </div>
+            <div class="step-item anim">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h3>Upgrade & Earn More</h3>
+                    <p>Deposit funds and buy bigger machines. More machines means more daily income automatically.</p>
+                </div>
+            </div>
+            <div class="step-item anim">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <h3>Withdraw Anytime</h3>
+                    <p>Withdraw your earnings to your bank account within 24 hours. No hidden fees ever.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY CHOOSE US -->
+    <section class="sec">
+        <div class="sec-top anim">
+            <div class="sec-label">Why InvestorPro</div>
+            <h2 class="sec-title">Why 15,000+ People Trust Us</h2>
+            <p class="sec-desc">Built for security. Designed for growth.</p>
+        </div>
+        <div class="why-list">
+            <div class="why-item anim">
+                <div class="why-icon"><i class="fas fa-shield-alt"></i></div>
+                <div class="why-content">
+                    <h3>Bank-Level Security</h3>
+                    <p>256-bit SSL encryption protects every transaction. Your money and data are completely safe.</p>
+                </div>
+            </div>
+            <div class="why-item anim">
+                <div class="why-icon"><i class="fas fa-bolt"></i></div>
+                <div class="why-content">
+                    <h3>Instant Deposits</h3>
+                    <p>Fund your wallet instantly via bank transfer, card payment, or USSD. No waiting around.</p>
+                </div>
+            </div>
+            <div class="why-item anim">
+                <div class="why-icon"><i class="fas fa-clock"></i></div>
+                <div class="why-content">
+                    <h3>24hr Withdrawals</h3>
+                    <p>Request withdrawal anytime. Money hits your bank account within 24 hours guaranteed.</p>
+                </div>
+            </div>
+            <div class="why-item anim">
+                <div class="why-icon"><i class="fas fa-users"></i></div>
+                <div class="why-content">
+                    <h3>Referral Bonus</h3>
+                    <p>Earn 10% of every deposit your referrals make. Share your link and watch income grow.</p>
+                </div>
+            </div>
+            <div class="why-item anim">
+                <div class="why-icon"><i class="fas fa-headset"></i></div>
+                <div class="why-content">
+                    <h3>24/7 Support</h3>
+                    <p>Our support team is always online. Chat with us anytime via WhatsApp or live chat.</p>
+                </div>
+            </div>
+            <div class="why-item anim">
+                <div class="why-icon"><i class="fas fa-gift"></i></div>
+                <div class="why-content">
+                    <h3>Free Starter Machine</h3>
+                    <p>Every new user gets a FREE Coffee Maker. No deposit required. Start earning immediately.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="reviews-sec">
+        <div class="sec-top anim">
+            <div class="sec-label">Testimonials</div>
+            <h2 class="sec-title">What Our Investors Say</h2>
+            <p class="sec-desc">Real people. Real earnings.</p>
+        </div>
+        <div class="reviews-scroll">
+            <div class="review-item anim">
+                <div class="review-stars">★★★★★</div>
+                <div class="review-text">I started with the free Coffee Maker just to test it. Within a week I deposited ₦50,000 and bought the Ice Cream Machine. Now I'm earning ₦6,000 daily doing absolutely nothing. This is real!</div>
+                <div class="review-author">
+                    <div class="review-avi ra-1">EO</div>
+                    <div>
+                        <div class="review-name">Emeka Obi</div>
+                        <div class="review-role">Investor since 2024</div>
+                    </div>
+                </div>
+            </div>
+            <div class="review-item anim">
+                <div class="review-stars">★★★★★</div>
+                <div class="review-text">I was skeptical at first but the free machine convinced me. I've withdrawn over ₦200,000 so far. The withdrawal is always within 24 hours like they promised. My friends are all joining now.</div>
+                <div class="review-author">
+                    <div class="review-avi ra-2">BN</div>
+                    <div>
+                        <div class="review-name">Blessing Nwosu</div>
+                        <div class="review-role">Investor since 2024</div>
+                    </div>
+                </div>
+            </div>
+            <div class="review-item anim">
+                <div class="review-stars">★★★★★</div>
+                <div class="review-text">The referral system is amazing. I shared my link on WhatsApp and 15 people signed up. I'm earning 10% of all their deposits without doing anything extra. Best passive income ever!</div>
+                <div class="review-author">
+                    <div class="review-avi ra-3">KA</div>
+                    <div>
+                        <div class="review-name">Kunle Adeyemi</div>
+                        <div class="review-role">Top Referrer</div>
+                    </div>
+                </div>
+            </div>
+            <div class="review-item anim">
+                <div class="review-stars">★★★★★</div>
+                <div class="review-text">I bought the Mini Restaurant machine and I'm earning ₦35,000 every single day. In one month that's over ₦1 million. This platform changed my life completely.</div>
+                <div class="review-author">
+                    <div class="review-avi ra-4">FO</div>
+                    <div>
+                        <div class="review-name">Funke Olamide</div>
+                        <div class="review-role">Premium Investor</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-sec">
+        <div class="sec-top anim">
+            <div class="sec-label">FAQ</div>
+            <h2 class="sec-title">Common Questions</h2>
+            <p class="sec-desc">Everything you need to know</p>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item anim">
+                <div class="faq-q" onclick="toggleFaq(this)">Is InvestorPro legitimate? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-a"><p>Yes! InvestorPro is a registered investment platform with over 15,000 active investors. We've paid out over ₦500 million in earnings and withdrawals.</p></div>
+            </div>
+            <div class="faq-item anim">
+                <div class="faq-q" onclick="toggleFaq(this)">How does the free Coffee Maker work? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-a"><p>Every new user gets a free Coffee Maker machine that earns ₦200 per day for 3 days. No deposit required. It's our way of letting you test the platform.</p></div>
+            </div>
+            <div class="faq-item anim">
+                <div class="faq-q" onclick="toggleFaq(this)">How long do withdrawals take? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-a"><p>Withdrawals are processed within 24 hours. Once approved your money is sent directly to your bank account. Minimum withdrawal is ₦5,000.</p></div>
+            </div>
+            <div class="faq-item anim">
+                <div class="faq-q" onclick="toggleFaq(this)">Can I buy multiple machines? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-a"><p>Absolutely! You can own as many machines as you want. Each machine earns independently. More machines means more daily income.</p></div>
+            </div>
+            <div class="faq-item anim">
+                <div class="faq-q" onclick="toggleFaq(this)">How does the referral program work? <i class="fas fa-chevron-down"></i></div>
+                <div class="faq-a"><p>Share your unique referral link with friends. When they sign up and deposit you earn 10% of their deposit amount instantly. No limit on referrals.</p></div>
+            </div>
+        </div>
+    </section>
+    <!-- CTA -->
+    <section class="cta-sec">
+        <div class="cta-inner anim">
+            <div class="sec-label">Start Now</div>
+            <h2>Ready To Start Earning?</h2>
+            <p>Join 15,000+ investors already earning daily returns. Get your FREE Coffee Maker and start making money today.</p>
+            <a href="signup.html" class="btn-main press"><i class="fas fa-rocket"></i> Create Free Account</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-brand-logo">
+                    <img src="https://i.postimg.cc/j5dLBnvw/Minimalist-logo-for-202603191648.jpg" alt="Logo">
+                    <span>Investor<b>Pro</b></span>
+                </div>
+                <p>Smart machine investments that earn daily returns. Start free and grow your income automatically.</p>
+                <div class="footer-socials">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-telegram"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <a href="#machines">Machines</a>
+                <a href="#">How It Works</a>
+                <a href="#">FAQ</a>
+                <a href="login.html">Login</a>
+                <a href="signup.html">Sign Up</a>
+            </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <a href="#">Help Center</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 InvestorPro. All rights reserved. Designed by <span>Prosper Oliver</span></p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // PRELOADER
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('preloader').classList.add('hidden');
+            }, 1800);
+        });
+
+        // SCROLL ANIMATIONS
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.anim').forEach(function(el) {
+            observer.observe(el);
+        });
+
+        // FAQ
+        function toggleFaq(el) {
+            var item = el.parentElement;
+            var all = document.querySelectorAll('.faq-item');
+            all.forEach(function(f) {
+                if (f !== item) f.classList.remove('open');
+            });
+            item.classList.toggle('open');
+        }
+
+        // NAVBAR SHADOW
+        window.addEventListener('scroll', function() {
+            var nav = document.getElementById('navbar');
+            if (window.scrollY > 30) {
+                nav.classList.add('shadow');
+            } else {
+                nav.classList.remove('shadow');
+            }
+        });
+
+        // PRESS EFFECT
+        document.querySelectorAll('.press').forEach(function(btn) {
+            btn.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.95)';
+            });
+            btn.addEventListener('touchend', function() {
+                var el = this;
+                el.style.transform = 'scale(1)';
+                setTimeout(function() {
+                    el.style.transform = '';
+                }, 150);
+            });
+        });
+    </script>
+
+</body>
+</html>
