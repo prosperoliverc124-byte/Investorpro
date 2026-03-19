@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Referral — InvestorPro</title>
+    <link rel="icon" href="https://i.postimg.cc/j5dLBnvw/Minimalist-logo-for-202603191648.jpg" type="image/jpeg">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f5f7fa;
+            color: #1a1a2e;
+            padding-bottom: 80px;
+            min-height: 100vh;
+        }
+
+        a, button, input {
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        .press { transition: transform 0.15s ease; }
+        .press:active { transform: scale(0.95); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-bar {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .page-back {
+            width: 36px; height: 36px;
+            border-radius: 12px;
+            background: #f5f7fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a1a2e;
+            font-size: 16px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .page-title {
+            flex: 1;
+            text-align: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .page-spacer {
+            width: 36px;
+            flex-shrink: 0;
+        }
+
+        .page-content {
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            animation: fadeUp 0.5s ease;
+        }
+
+        .ref-hero {
+            background: linear-gradient(135deg, #0a1628, #1a2a4a);
+            border-radius: 20px;
+            padding: 28px 22px;
+            color: #fff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .ref-hero-icon {
+            width: 64px; height: 64px;
+            border-radius: 50%;
+            background: rgba(26, 86, 204, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 14px;
+        }
+
+        .ref-hero h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .ref-hero p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .ref-bonus {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 18px 10px;
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+        }
+
+        .stat-num.green { color: #10b981; }
+        .stat-num.blue { color: #1a56cc; }
+        .stat-num.purple { color: #8b5cf6; }
+
+        .stat-label {
+            font-size: 11px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .ref-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 14px;
+        }
+
+        .ref-link-wrap {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .ref-input {
+            flex: 1;
+            padding: 14px 16px;
+            background: #f8fafc;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .copy-btn {
+            padding: 0 18px;
+            background: #1a56cc;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .share-btn {
+            width: 100%;
+            padding: 14px;
+            background: #10b981;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .how-box, .ref-list-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .how-item {
+            display: flex;
+            gap: 14px;
+            padding: 16px 0;
+        }
+
+        .how-item:not(:last-child) {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .how-num {
+            width: 34px; height: 34px;
+            border-radius: 10px;
+            background: #f0f4ff;
+            color: #1a56cc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .how-content h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+        }
+
+        .how-content p {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .empty-ref {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .empty-ref-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .empty-ref h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 6px;
+        }
+
+        .empty-ref p {
+            font-size: 13px;
+            color: #9ca3af;
+            line-height: 1.6;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1a1a2e;
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0 14px;
+            border-top: 1px solid #f0f0f0;
+            z-index: 1000;
+        }
+
+        .nav-tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            padding: 4px 12px;
+        }
+
+        .nav-tab i { font-size: 20px; color: #9ca3af; }
+        .nav-tab span { font-size: 10px; font-weight: 600; color: #9ca3af; }
+        .nav-tab.active i { color: #1a56cc; }
+        .nav-tab.active span { color: #1a56cc; }
+        .nav-tab:active { transform: scale(0.9); }
+
+        @media (min-width: 769px) {
+            .page-content { max-width: 480px; }
+            .bottom-nav {
+                max-width: 500px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 20px 20px 0 0;
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+            }
+            .page-bar { max-width: 500px; margin: 0 auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toast" id="toast">Copied!</div>
+
+    <div class="page-bar">
+        <a href="dashboard.html" class="page-back press"><i class="fas fa-arrow-left"></i></a>
+        <div class="page-title">Referral</div>
+        <div class="page-spacer"></div>
+    </div>
+
+    <div class="page-content">
+
+        <div class="ref-hero">
+            <div class="ref-hero-icon"><i class="fas fa-users"></i></div>
+            <h2>Invite & Earn</h2>
+            <p>Earn 10% of every deposit your referrals make. Share your link and grow your passive income.</p>
+            <div class="ref-bonus">10% Referral Bonus</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-num blue" id="totalRefs">0</div>
+                <div class="stat-label">Total Referrals</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num purple" id="activeRefs">0</div>
+                <div class="stat-label">Active Referrals</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num green" id="refEarnings">₦0</div>
+                <div class="stat-label">Earned</div>
+            </div>
+        </div>
+
+        <div class="ref-box">
+            <div class="section-title">Your Referral Link</div>
+            <div class="ref-link-wrap">
+                <input type="text" class="ref-input" id="refLink" readonly>
+                <button class="copy-btn press" onclick="copyRef()">Copy</button>
+            </div>
+            <button class="share-btn press" onclick="shareWhatsApp()"><i class="fab fa-whatsapp"></i> Share on WhatsApp</button>
+        </div>
+
+        <div class="how-box">
+            <div class="section-title">How It Works</div>
+            <div class="how-item">
+                <div class="how-num">1</div>
+                <div class="how-content">
+                    <h4>Share Your Link</h4>
+                    <p>Send your unique referral link to friends on WhatsApp, Facebook, Instagram, or anywhere.</p>
+                </div>
+            </div>
+            <div class="how-item">
+                <div class="how-num">2</div>
+                <div class="how-content">
+                    <h4>They Sign Up</h4>
+                    <p>When someone creates an account using your link, they become your referral instantly.</p>
+                </div>
+            </div>
+            <div class="how-item">
+                <div class="how-num">3</div>
+                <div class="how-content">
+                    <h4>They Deposit</h4>
+                    <p>When your referral funds their wallet, you earn 10% of that deposit automatically.</p>
+                </div>
+            </div>
+            <div class="how-item">
+                <div class="how-num">4</div>
+                <div class="how-content">
+                    <h4>Get Paid</h4>
+                    <p>Your referral bonus is added to your wallet balance and can be withdrawn anytime.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="ref-list-box">
+            <div class="section-title">Your Referrals</div>
+            <div class="empty-ref" id="emptyRef">
+                <div class="empty-ref-icon">👥</div>
+                <h3>No referrals yet</h3>
+                <p>Share your referral link to invite friends and start earning 10% commission on their deposits.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-tab"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="deposit.html" class="nav-tab"><i class="fas fa-plus-circle"></i><span>Deposit</span></a>
+        <a href="invest.html" class="nav-tab"><i class="fas fa-chart-line"></i><span>Invest</span></a>
+        <a href="withdraw.html" class="nav-tab"><i class="fas fa-wallet"></i><span>Withdraw</span></a>
+        <a href="profile.html" class="nav-tab active"><i class="fas fa-user"></i><span>Profile</span></a>
+    </div>
+
+    <script>
+        if (localStorage.getItem('investorpro_logged_in') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        var stored = localStorage.getItem('investorpro_user');
+        if (stored) {
+            var user = JSON.parse(stored);
+            var refCode = user.phone || '08000000000';
+            var refLink = window.location.origin + '/investorpro/signup.html?ref=' + refCode;
+            document.getElementById('refLink').value = refLink;
+
+            document.getElementById('totalRefs').textContent = user.referrals || 0;
+            document.getElementById('activeRefs').textContent = user.referrals || 0;
+            document.getElementById('refEarnings').textContent = '₦' + ((user.referralEarnings || 0).toLocaleString());
+        }
+
+        function copyRef() {
+            var link = document.getElementById('refLink').value;
+            navigator.clipboard.writeText(link).then(function() {
+                showToast('Referral link copied!');
+            }).catch(function() {
+                showToast('Long press to copy');
+            });
+        }
+
+        function shareWhatsApp() {
+            var link = document.getElementById('refLink').value;
+            var text = encodeURIComponent("Join InvestorPro with my referral link and start earning daily! " + link);
+            window.open("https://wa.me/?text=" + text, "_blank");
+        }
+
+        function showToast(msg) {
+            var toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(function() {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+    </script>
+
+</body>
+  </html>
