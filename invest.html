@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Invest — InvestorPro</title>
+    <link rel="icon" href="https://i.postimg.cc/j5dLBnvw/Minimalist-logo-for-202603191648.jpg" type="image/jpeg">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f5f7fa;
+            color: #1a1a2e;
+            padding-bottom: 80px;
+            min-height: 100vh;
+        }
+
+        a, button, input {
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        .press { transition: transform 0.15s ease; }
+        .press:active { transform: scale(0.95); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes checkPop {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* TOP BAR */
+        .page-bar {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .page-back {
+            width: 36px; height: 36px;
+            border-radius: 12px;
+            background: #f5f7fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a1a2e;
+            font-size: 16px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .page-title {
+            flex: 1;
+            text-align: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .page-spacer {
+            width: 36px;
+            flex-shrink: 0;
+        }
+
+        /* CONTENT */
+        .page-content {
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            animation: fadeUp 0.5s ease;
+        }
+
+        /* BALANCE BAR */
+        .bal-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+        }
+
+        .bal-bar-left {
+            font-size: 13px;
+            color: #9ca3af;
+        }
+
+        .bal-bar-amount {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: #1a1a2e;
+        }
+
+        .bal-bar-btn {
+            padding: 8px 18px;
+            background: #f0f4ff;
+            color: #1a56cc;
+            border: none;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* SECTION HEAD */
+        .sec-head {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 14px;
+        }
+
+        .sec-sub {
+            font-size: 13px;
+            color: #9ca3af;
+            margin-top: -10px;
+            margin-bottom: 16px;
+        }
+
+        /* MACHINE CARDS */
+        .machine-invest {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 14px;
+            transition: all 0.3s;
+        }
+
+        .machine-invest:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .machine-invest-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .machine-invest-img {
+            width: 56px; height: 56px;
+            border-radius: 16px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .machine-invest-info {
+            flex: 1;
+        }
+
+        .machine-invest-name {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 3px;
+        }
+
+        .machine-invest-tag {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tag-free { background: #f0fdf4; color: #10b981; }
+        .tag-popular { background: #f0f4ff; color: #1a56cc; }
+        .tag-hot { background: #fef2f2; color: #ef4444; }
+        .tag-premium { background: #fef3c7; color: #d97706; }
+        .tag-elite { background: #f5f3ff; color: #8b5cf6; }
+        .tag-ultimate { background: #fdf2f8; color: #ec4899; }
+
+        .machine-invest-price {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: #1a56cc;
+            flex-shrink: 0;
+        }
+
+        .machine-invest-price.free-price {
+            color: #10b981;
+        }
+
+        /* MACHINE DETAILS ROW */
+        .machine-details-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .detail-box {
+            text-align: center;
+            padding: 10px 8px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .detail-value {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 2px;
+        }
+
+        .detail-value.green { color: #10b981; }
+
+        .detail-label {
+            font-size: 10px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* BUY BUTTON */
+        .buy-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .buy-btn-blue {
+            background: #1a56cc;
+            color: #fff;
+        }
+
+        .buy-btn-blue:hover { background: #1545a8; }
+
+        .buy-btn-green {
+            background: #10b981;
+            color: #fff;
+        }
+
+        .buy-btn-green:hover { background: #059669; }
+
+        .buy-btn-grey {
+            background: #e5e7eb;
+            color: #9ca3af;
+            pointer-events: none;
+        }
+
+        .buy-btn.loading { pointer-events: none; opacity: 0.8; }
+
+        .buy-btn .spinner {
+            width: 18px; height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            display: none;
+        }
+
+        .buy-btn.loading .spinner { display: block; }
+        .buy-btn.loading .btn-text { display: none; }
+        /* SUCCESS OVERLAY */
+        .success-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.98);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .success-overlay.show { display: flex; }
+
+        .success-check {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: #10b981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: #fff;
+            margin-bottom: 20px;
+            animation: checkPop 0.5s ease;
+        }
+
+        .success-overlay h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-bottom: 6px;
+        }
+
+        .success-overlay p {
+            font-size: 14px;
+            color: #9ca3af;
+            margin-bottom: 24px;
+            text-align: center;
+            padding: 0 30px;
+        }
+
+        .success-btn {
+            padding: 14px 40px;
+            background: #1a56cc;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* INSUFFICIENT POPUP */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9998;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .popup-overlay.show { display: flex; }
+
+        .popup-box {
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px 24px;
+            max-width: 340px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .popup-icon {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            background: #fef2f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #ef4444;
+            margin: 0 auto 16px;
+        }
+
+        .popup-box h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .popup-box p {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .popup-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .popup-btn-deposit {
+            flex: 1;
+            padding: 12px;
+            background: #1a56cc;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .popup-btn-cancel {
+            flex: 1;
+            padding: 12px;
+            background: #f5f7fa;
+            color: #6b7280;
+            border: none;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0 14px;
+            border-top: 1px solid #f0f0f0;
+            z-index: 1000;
+        }
+
+        .nav-tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            padding: 4px 12px;
+        }
+
+        .nav-tab i { font-size: 20px; color: #9ca3af; }
+        .nav-tab span { font-size: 10px; font-weight: 600; color: #9ca3af; }
+        .nav-tab.active i { color: #1a56cc; }
+        .nav-tab.active span { color: #1a56cc; }
+        .nav-tab:active { transform: scale(0.9); }
+
+        @media (min-width: 769px) {
+            .page-content { max-width: 480px; }
+            .bottom-nav {
+                max-width: 500px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 20px 20px 0 0;
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+            }
+            .page-bar { max-width: 500px; margin: 0 auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SUCCESS OVERLAY -->
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-check"><i class="fas fa-check"></i></div>
+        <h2>Machine Purchased!</h2>
+        <p id="successMsg">Your Coffee Maker is now active and earning ₦200 daily!</p>
+        <a href="dashboard.html" class="success-btn press">Back to Dashboard</a>
+    </div>
+
+    <!-- INSUFFICIENT FUNDS POPUP -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-box">
+            <div class="popup-icon"><i class="fas fa-exclamation"></i></div>
+            <h3>Insufficient Balance</h3>
+            <p id="popupMsg">You need ₦5,000 to buy this machine. Please deposit funds first.</p>
+            <div class="popup-btns">
+                <a href="deposit.html" class="popup-btn-deposit press">Deposit Now</a>
+                <button class="popup-btn-cancel press" onclick="closePopup()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOP BAR -->
+    <div class="page-bar">
+        <a href="dashboard.html" class="page-back press"><i class="fas fa-arrow-left"></i></a>
+        <div class="page-title">Invest</div>
+        <div class="page-spacer"></div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="page-content">
+
+        <!-- BALANCE BAR -->
+        <div class="bal-bar">
+            <div>
+                <div class="bal-bar-left">Available Balance</div>
+                <div class="bal-bar-amount" id="userBal">₦0.00</div>
+            </div>
+            <a href="deposit.html" class="bal-bar-btn press"><i class="fas fa-plus"></i> Add Funds</a>
+        </div>
+
+        <div class="sec-head">Available Machines</div>
+        <div class="sec-sub">Tap a machine to start earning daily</div>
+
+        <!-- COFFEE MAKER -->
+        <div class="machine-invest" id="machine-coffee">
+            <div class="machine-invest-top">
+                <img src="https://i.postimg.cc/W3HbKWdV/3D-cartoon-coffee-202603191651.jpg" class="machine-invest-img" alt="Coffee Maker">
+                <div class="machine-invest-info">
+                    <div class="machine-invest-name">☕ Coffee Maker</div>
+                    <span class="machine-invest-tag tag-free">FREE</span>
+                </div>
+                <div class="machine-invest-price free-price">FREE</div>
+            </div>
+            <div class="machine-details-row">
+                <div class="detail-box"><div class="detail-value green">₦200</div><div class="detail-label">Daily</div></div>
+                <div class="detail-box"><div class="detail-value">3 Days</div><div class="detail-label">Duration</div></div>
+                <div class="detail-box"><div class="detail-value green">₦600</div><div class="detail-label">Total</div></div>
+            </div>
+            <button class="buy-btn buy-btn-grey" disabled><span class="btn-text">Already Claimed</span></button>
+        </div>
+
+        <!-- JUICE BLENDER -->
+        <div class="machine-invest">
+            <div class="machine-invest-top">
+                <img src="https://i.postimg.cc/fRNXBy4d/3D-cartoon-juice-202603191653.jpg" class="machine-invest-img" alt="Juice Blender">
+                <div class="machine-invest-info">
+                    <div class="machine-invest-name">🧃 Juice Blender</div>
+                    <span class="machine-invest-tag tag-popular">Popular</span>
+                </div>
+                <div class="machine-invest-price">₦5,000</div>
+            </div>
+            <div class="machine-details-row">
+                <div class="detail-box"><div class="detail-value green">₦750</div><div class="detail-label">Daily</div></div>
+                <div class="detail-box"><div class="detail-value">30 Days</div><div class="detail-label">Duration</div></div>
+                <div class="detail-box"><div class="detail-value green">₦22,500</div><div class="detail-label">Total</div></div>
+            </div>
+            <button class="buy-btn buy-btn-blue press" onclick="buyMachine('Juice Blender','🧃',5000,750,30)"><span class="btn-text">Buy — ₦5,000</span><div class="spinner"></div></button>
+        </div>
+
+        <!-- POPCORN MACHINE -->
+        <div class="machine-invest">
+            <div class="machine-invest-top">
+                <img src="https://i.postimg.cc/xChNHTyd/Flow-202603191655.jpg" class="machine-invest-img" alt="Popcorn Machine">
+                <div class="machine-invest-info">
+                    <div class="machine-invest-name">🍿 Popcorn Machine</div>
+                    <span class="machine-invest-tag tag-hot">Hot</span>
+                </div>
+                <div class="machine-invest-price">₦20,000</div>
+            </div>
+            <div class="machine-details-row">
+                <div class="detail-box"><div class="detail-value green">₦2,500</div><div class="detail-label">Daily</div></div>
+                <div class="detail-box"><div class="detail-value">30 Days</div><div class="detail-label">Duration</div></div>
+                <div class="detail-box"><div class="detail-value green">₦75,000</div><div class="detail-label">Total</div></div>
+            </div>
+            <button class="buy-btn buy-btn-blue press" onclick="buyMachine('Popcorn Machine','🍿',20000,2500,30)"><span class="btn-text">Buy — ₦20,000</span><div class="spinner"></div></button>
+        </div>
+
+        <!-- ICE CREAM -->
+        <div class="machine-invest">
+            <div class="machine-invest-top">
+                <img src="https://i.postimg.cc/5NBBLLH4/Flow-202603191729.jpg" class="machine-invest-img" alt="Ice Cream Machine">
+                <div class="machine-invest-info">
+                    <div class="machine-invest-name">🍦 Ice Cream Machine</div>
+                    <span class="machine-invest-tag tag-premium">Premium</span>
+                </div>
+                <div class="machine-invest-price">₦50,000</div>
+            </div>
+            <div class="machine-details-row">
+                <div class="detail-box"><div class="detail-value green">₦6,000</div><div class="detail-label">Daily</div></div>
+                <div class="detail-box"><div class="detail-value">30 Days</div><div class="detail-label">Duration</div></div>
+                <div class="detail-box"><div class="detail-value green">₦180,000</div><div class="detail-label">Total</div></div>
+            </div>
+            <button class="buy-btn buy-btn-blue press" onclick="buyMachine('Ice Cream Machine','🍦',50000,6000,30)"><span class="btn-text">Buy — ₦50,000</span><div class="spinner"></div></button>
+        </div>
+
+        <!-- PIZZA OVEN -->
+        <div class="machine-invest">
+            <div class="machine-invest-top">
+                <img src="https://i.postimg.cc/85mPkpKq/3D-cartoon-pizza-202603191706.jpg" class="machine-invest-img" alt="Pizza Oven">
+                <div class="machine-invest-info">
+                    <div class="machine-invest-name">🍕 Pizza Oven</div>
+                    <span class="machine-invest-tag tag-elite">Elite</span>
+                </div>
+                <div class="machine-invest-price">₦100,000</div>
+            </div>
+            <div class="machine-details-row">
+                <div class="detail-box"><div class="detail-value green">₦13,000</div><div class="detail-label">Daily</div></div>
+                <div class="detail-box"><div class="detail-value">30 Days</div><div class="detail-label">Duration</div></div>
+                <div class="detail-box"><div class="detail-value green">₦390,000</div><div class="detail-label">Total</div></div>
+            </div>
+            <button class="buy-btn buy-btn-blue press" onclick="buyMachine('Pizza Oven','🍕',100000,13000,30)"><span class="btn-text">Buy — ₦100,000</span><div class="spinner"></div></button>
+        </div>
+
+        <!-- MINI RESTAURANT -->
+        <div class="machine-invest">
+            <div class="machine-invest-top">
+                <img src="https://i.postimg.cc/Df5ytzbP/3D-cartoon-restaurant-202603191707.jpg" class="machine-invest-img" alt="Mini Restaurant">
+                <div class="machine-invest-info">
+                    <div class="machine-invest-name">🏪 Mini Restaurant</div>
+                    <span class="machine-invest-tag tag-ultimate">Ultimate</span>
+                </div>
+                <div class="machine-invest-price">₦250,000</div>
+            </div>
+            <div class="machine-details-row">
+                <div class="detail-box"><div class="detail-value green">₦35,000</div><div class="detail-label">Daily</div></div>
+                <div class="detail-box"><div class="detail-value">30 Days</div><div class="detail-label">Duration</div></div>
+                <div class="detail-box"><div class="detail-value green">₦1.05M</div><div class="detail-label">Total</div></div>
+            </div>
+            <button class="buy-btn buy-btn-blue press" onclick="buyMachine('Mini Restaurant','🏪',250000,35000,30)"><span class="btn-text">Buy — ₦250,000</span><div class="spinner"></div></button>
+        </div>
+
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-tab"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="deposit.html" class="nav-tab"><i class="fas fa-plus-circle"></i><span>Deposit</span></a>
+        <a href="invest.html" class="nav-tab active"><i class="fas fa-chart-line"></i><span>Invest</span></a>
+        <a href="withdraw.html" class="nav-tab"><i class="fas fa-wallet"></i><span>Withdraw</span></a>
+        <a href="profile.html" class="nav-tab"><i class="fas fa-user"></i><span>Profile</span></a>
+    </div>
+
+    <script>
+        if (localStorage.getItem('investorpro_logged_in') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        var stored = localStorage.getItem('investorpro_user');
+        var user = stored ? JSON.parse(stored) : null;
+
+        if (user) {
+            document.getElementById('userBal').textContent = '₦' + (user.balance || 0).toLocaleString() + '.00';
+        }
+
+        function closePopup() {
+            document.getElementById('popupOverlay').classList.remove('show');
+        }
+
+        function buyMachine(name, icon, price, daily, duration) {
+            if (!user) return;
+
+            if ((user.balance || 0) < price) {
+                document.getElementById('popupMsg').textContent = 'You need ₦' + price.toLocaleString() + ' to buy the ' + name + '. Please deposit funds first.';
+                document.getElementById('popupOverlay').classList.add('show');
+                return;
+            }
+
+            var btn = event.target.closest('.buy-btn');
+            btn.classList.add('loading');
+
+            setTimeout(function() {
+                user.balance = (user.balance || 0) - price;
+
+                var machine = {
+                    name: name,
+                    icon: icon,
+                    price: price,
+                    daily: daily,
+                    duration: duration,
+                    daysLeft: duration,
+                    earned: 0,
+                    started: new Date().toISOString()
+                };
+
+                if (!user.machines) user.machines = [];
+                user.machines.push(machine);
+
+                localStorage.setItem('investorpro_user', JSON.stringify(user));
+
+                btn.classList.remove('loading');
+                document.getElementById('successMsg').textContent = 'Your ' + name + ' is now active and earning ₦' + daily.toLocaleString() + ' daily!';
+                document.getElementById('successOverlay').classList.add('show');
+            }, 2000);
+        }
+    </script>
+
+</body>
+</html>
